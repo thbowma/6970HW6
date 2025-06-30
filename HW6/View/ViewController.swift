@@ -18,12 +18,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var yenSwitch: UISwitch!
     
     @IBOutlet weak var yuanSwitch: UISwitch!
-    var usdAmmount : Int = 0
-    var poundAmmount : Double = -1
-    var euroAmmount : Double = -1
-    var yenAmmount : Double = -1
-    var yuanAmmount : Double = -1
-    
+
+var conv = convertLogic()
     override func viewDidLoad() {
         super.viewDidLoad()
         errorLabel.text = ""
@@ -53,12 +49,9 @@ class ViewController: UIViewController {
              return
          }
 
-         usdAmmount = usd
+        conv.usdAmmount = usd
          
-         euroAmmount = euroSwitch.isOn ? Double(usd) * 0.89 : -1
-         poundAmmount = poundSwitch.isOn ? Double(usd) * 0.73 : -1
-         yenAmmount = yenSwitch.isOn ? Double(usd) * 127.94 : -1
-         yuanAmmount = yuanSwitch.isOn ? Double(usd) * 7.41 : -1
+        conv.convert(euro: euroSwitch.isOn, pound: poundSwitch.isOn, yen: yenSwitch.isOn, yuan: yuanSwitch.isOn)
         self.performSegue(withIdentifier: "toNav", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -66,11 +59,11 @@ class ViewController: UIViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "toNav" {
             let navigation = segue.destination as! resultViewController
-            navigation.euroAmmount = euroAmmount
-            navigation.poundAmmount = poundAmmount
-            navigation.yenAmmount = yenAmmount
-            navigation.yuanAmmount = yuanAmmount
-            navigation.usdAmmount = usdAmmount
+            navigation.euroAmmount = conv.euroAmmount
+            navigation.poundAmmount = conv.poundAmmount
+            navigation.yenAmmount = conv.yenAmmount
+            navigation.yuanAmmount = conv.yuanAmmount
+            navigation.usdAmmount = conv.usdAmmount
             
         }
     }
